@@ -12,10 +12,9 @@ public class Program
         int bottles = 5;
 
         Console.WriteLine("There are 5 bottles on the wall. Taking them down and passing around...");
-        while(bottles >= 0)
+        while(bottles > 0)
 		{
-			Console.WriteLine(bottles);
-			bottles--;
+			Console.WriteLine(--bottles + " bottles left on the wall...");
 	    }
 
         if (bottles <= 0) 
@@ -34,7 +33,7 @@ public class Program
     // event handler
     public static void bl_EventCompleted(object sender, EventArgs e)
     {
-        Console.WriteLine("Congratulations! You completed an event and replenished the bottles!");
+        Console.WriteLine("Congratulations! You completed an event and replenished the bottles on the wall!");
     }
 }
 
@@ -81,3 +80,4 @@ public class ProcessBusinessLogic
         EventCompleted?.Invoke(this, e);
     }
 }
+
