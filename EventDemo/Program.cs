@@ -10,28 +10,44 @@ public class Program
     }
 
     // event handler
-    public static void bl_ProcessCompleted(object sender, EventArgs e)
+    public static void bl_ProcessCompleted(object sender, bool IsSuccessful)
     {
-        Console.WriteLine("Process Completed!");
+        Console.WriteLine("Process " + (IsSuccessful? "Completed Successfully": "failed"));
     }
 }
 
 public class ProcessBusinessLogic
 {
-    public event EventHandler ProcessCompleted; // event
+    public event EventHandler<bool> ProcessCompleted; // event using .net built-in EventHandler with bool
 
     public void StartProcess()
     {
-        Console.WriteLine("Process Started!");
-	    Console.WriteLine("Press any key to continue");
-        Console.ReadLine();
+        Console.WriteLine("Process Registered with Event!");
+        bool repeat = true;
+        do {
+	        Console.WriteLine("Should Process Fail? Y/N");
+            string input = Console.ReadLine();
+            switch (input)
+            {
+                case "Y":
+                repeat = false;
+                OnProcessCompleted(false); // Bool Event Data
+                break;
 
-        OnProcessCompleted(EventArgs.Empty); // No Event data
+                case "N":
+                repeat = false;
+                OnProcessCompleted(true); // Bool Event Data
+                break;
+                
+                default:
+                Console.WriteLine("Invalid Response");
+                break;
+            }
+        } while(repeat);
     }
 
-
-    protected virtual void OnProcessCompleted(EventArgs e)
+    protected virtual void OnProcessCompleted(bool IsSuccessful)
     {
-        ProcessCompleted?.Invoke(this, e); // Invoke Event
+        ProcessCompleted?.Invoke(this, IsSuccessful); // Invoke Event
     }
 }
