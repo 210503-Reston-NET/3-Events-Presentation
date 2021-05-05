@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 					
 public class Program
 {
@@ -28,8 +28,8 @@ public class ProcessBusinessLogic
         
         
         // add new code here
-		    Console.WriteLine("Press any key to continue");
-        Console.ReadLine();
+		Console.WriteLine("Press any key to continue");
+        string input = Console.ReadLine();
         
         
         OnProcessCompleted();
