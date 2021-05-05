@@ -10,34 +10,28 @@ public class Program
     }
 
     // event handler
-    public static void bl_ProcessCompleted()
+    public static void bl_ProcessCompleted(object sender, EventArgs e)
     {
         Console.WriteLine("Process Completed!");
     }
 }
 
-public delegate void Notify();  // delegate
-                    
 public class ProcessBusinessLogic
 {
-    public event Notify ProcessCompleted; // event
+    public event EventHandler ProcessCompleted; // event
 
     public void StartProcess()
     {
         Console.WriteLine("Process Started!");
-        
-        
-        // add new code here
-		Console.WriteLine("Press any key to continue");
-        string input = Console.ReadLine();
-        
-        
-        OnProcessCompleted();
+	    Console.WriteLine("Press any key to continue");
+        Console.ReadLine();
+
+        OnProcessCompleted(EventArgs.Empty); // No Event data
     }
 
 
-    protected virtual void OnProcessCompleted()
+    protected virtual void OnProcessCompleted(EventArgs e)
     {
-        ProcessCompleted?.Invoke();
+        ProcessCompleted?.Invoke(this, e); // Invoke Event
     }
 }
