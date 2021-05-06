@@ -5,9 +5,9 @@ public class Program
 	public static void Main()
     {
         ProcessBusinessLogic bl = new ProcessBusinessLogic();
-        bl.ProcessCompleted += bl_ProcessCompleted; // register with an event
-        bl.AnotherEvent += bl_EventHandlerTwo;
-        bl.DateEvent += bl_DateEventHandler;
+        bl.ProcessCompleted += bl_ProcessCompleted; // Register bool event
+        bl.AnotherEvent += bl_EventHandlerTwo; // Register Another Event
+        bl.DateEvent += bl_DateEventHandler; // Register Date Event
         bl.StartProcess();
     }
 
@@ -27,6 +27,8 @@ public class Program
         Console.WriteLine("Completion Time: " + date.CompletionTime.ToLongDateString());
     }
 }
+
+// Custom EventArgs
 public class DateEventArgs : EventArgs {
         public DateTime CompletionTime {get; set;}
     }
@@ -43,8 +45,8 @@ public class ProcessBusinessLogic
         Console.WriteLine("Process Registered with Event!");
         bool repeat = true;
         do {
-	        Console.WriteLine("[1] Fail Process");
-            Console.WriteLine("[2] Process Succeed");
+	        Console.WriteLine("[1] Fail");
+            Console.WriteLine("[2] Pass");
             Console.WriteLine("[3] Raise new event");
             Console.WriteLine("[4] Pass Date Through Event");
             string input = Console.ReadLine();
@@ -62,14 +64,14 @@ public class ProcessBusinessLogic
 
                 case "3":
                     repeat = false;
-                    AnotherEventRaised(EventArgs.Empty);
+                    AnotherEventRaised(EventArgs.Empty); // Empty Event Data
                     break;
 
                 case "4":
                     repeat = false;
                     var date = new DateEventArgs();
                     date.CompletionTime = DateTime.Now;
-                    DateEventRaised(date);
+                    DateEventRaised(date); // Date Event Data
 
                     break;
 
@@ -83,14 +85,14 @@ public class ProcessBusinessLogic
 
     protected virtual void OnProcessCompleted(bool IsSuccessful)
     {
-        ProcessCompleted?.Invoke(this, IsSuccessful); // Invoke Event
+        ProcessCompleted?.Invoke(this, IsSuccessful); // Invoke bool Event
     }
 
     protected virtual void AnotherEventRaised(EventArgs e) {
-        AnotherEvent?.Invoke(this, e);
+        AnotherEvent?.Invoke(this, e); // Invoke Another Event
     }
 
     protected virtual void DateEventRaised(DateEventArgs date) {
-        DateEvent?.Invoke(this, date); 
+        DateEvent?.Invoke(this, date); // Invoke Date Event
     }
 }
