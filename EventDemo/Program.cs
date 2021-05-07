@@ -22,7 +22,7 @@ public class Program
         Console.WriteLine("Empty Event Processed");
     }
 
-    // Date Event Handler
+    // Threshold Event Handler
     public static void bl_DateEventHandler(object sender, ThresholdEventArgs date) {
         Console.WriteLine("Threshold: " + date.Threshold);
         Console.WriteLine("Completion Time: " + date.CompletionTime.ToLongDateString());
@@ -60,14 +60,14 @@ public class ProcessBusinessLogic
                     break;
 
                 case "2":
-                repeat = false;
-                BoolEventRaised(true); // Bool Event Data
-                break;
+                    repeat = false;
+                    BoolEventRaised(true); // Bool Event Data
+                    break;
 
                 case "3":
-                repeat = false;
-                BoolEventRaised(false); // Bool Event Data
-                break;
+                    repeat = false;
+                    BoolEventRaised(false); // Bool Event Data
+                    break;
 
                 case "4":
                     repeat = false;
