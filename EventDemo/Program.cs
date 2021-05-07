@@ -5,73 +5,79 @@ public class Program
 	public static void Main()
     {
         ProcessBusinessLogic bl = new ProcessBusinessLogic();
-        bl.ProcessCompleted += bl_ProcessCompleted; // Register bool event
-        bl.AnotherEvent += bl_EventHandlerTwo; // Register Another Event
-        bl.DateEvent += bl_DateEventHandler; // Register Date Event
+        bl.Event += bl_EmptyEventHandler; // Register Empty Event
+        bl.BoolEvent += bl_BoolEventHandler; // Register bool event
+        bl.ThresholdEvent += bl_DateEventHandler; // Register Date Event
         bl.StartProcess();
     }
 
     // Bool Event handler
-    public static void bl_ProcessCompleted(object sender, bool IsSuccessful)
+    public static void bl_BoolEventHandler(object sender, bool IsSuccessful)
     {
         Console.WriteLine("Process " + (IsSuccessful? "Completed Successfully": "failed"));
     }
 
     // Another Event Handler
-    public static void bl_EventHandlerTwo(object sender, EventArgs e) {
-        Console.WriteLine("Another Event Processed");
+    public static void bl_EmptyEventHandler(object sender, EventArgs e) {
+        Console.WriteLine("Empty Event Processed");
     }
 
     // Date Event Handler
-    public static void bl_DateEventHandler(object sender, DateEventArgs date) {
+    public static void bl_DateEventHandler(object sender, ThresholdEventArgs date) {
+        Console.WriteLine("Threshold: " + date.Threshold);
         Console.WriteLine("Completion Time: " + date.CompletionTime.ToLongDateString());
     }
 }
 
 // Custom EventArgs
-public class DateEventArgs : EventArgs {
+public class ThresholdEventArgs : EventArgs {
         public DateTime CompletionTime {get; set;}
+        public int Threshold {get; set;}
     }
 public class ProcessBusinessLogic
 {
-    public event EventHandler<bool> ProcessCompleted; // Created event using .net built-in EventHandler with bool
 
-    public event EventHandler AnotherEvent; // Creates second event
+    public event EventHandler Event; // Creates empty event using .Net built-in EventHandler
+    public event EventHandler<bool> BoolEvent; // Created event with bool
 
-    public event EventHandler<DateEventArgs> DateEvent; // Creates date event
+    public event EventHandler<ThresholdEventArgs> ThresholdEvent; // Creates threshold event
 
     public void StartProcess()
     {
-        Console.WriteLine("Process Registered with Event!");
+        Console.WriteLine("Process Registered with Events!");
         bool repeat = true;
         do {
-	        Console.WriteLine("[1] Fail");
-            Console.WriteLine("[2] Pass");
-            Console.WriteLine("[3] Raise new event");
-            Console.WriteLine("[4] Pass Date Through Event");
+            Console.WriteLine("[1] Raise Empty Event");
+	        Console.WriteLine("[2] Pass");
+            Console.WriteLine("[3] Fail");
+            Console.WriteLine("[4] Threshold Event");
             string input = Console.ReadLine();
             switch (input)
             {
                 case "1":
-                repeat = false;
-                OnProcessCompleted(false); // Bool Event Data
-                break;
+                    repeat = false;
+                    EmptyEventRaised(EventArgs.Empty); // Empty Event Data
+                    break;
 
                 case "2":
                 repeat = false;
-                OnProcessCompleted(true); // Bool Event Data
+                BoolEventRaised(true); // Bool Event Data
                 break;
 
                 case "3":
-                    repeat = false;
-                    AnotherEventRaised(EventArgs.Empty); // Empty Event Data
-                    break;
+                repeat = false;
+                BoolEventRaised(false); // Bool Event Data
+                break;
 
                 case "4":
                     repeat = false;
-                    var date = new DateEventArgs();
-                    date.CompletionTime = DateTime.Now;
-                    DateEventRaised(date); // Date Event Data
+                    var data = new ThresholdEventArgs();
+                    data.CompletionTime = DateTime.Now;
+                    for (int i = 0; i < 5; i++)
+                    {
+                        data.Threshold = i;
+                    }
+                    ThresholdEventRaised(data); // Date Event Data
 
                     break;
 
@@ -83,16 +89,16 @@ public class ProcessBusinessLogic
         } while(repeat);
     }
 
-    protected virtual void OnProcessCompleted(bool IsSuccessful)
+    protected virtual void BoolEventRaised(bool IsSuccessful)
     {
-        ProcessCompleted?.Invoke(this, IsSuccessful); // Invoke bool Event
+        BoolEvent?.Invoke(this, IsSuccessful); // Invoke bool Event
     }
 
-    protected virtual void AnotherEventRaised(EventArgs e) {
-        AnotherEvent?.Invoke(this, e); // Invoke Another Event
+    protected virtual void EmptyEventRaised(EventArgs e) {
+        Event?.Invoke(this, e); // Invoke Another Event
     }
 
-    protected virtual void DateEventRaised(DateEventArgs date) {
-        DateEvent?.Invoke(this, date); // Invoke Date Event
+    protected virtual void ThresholdEventRaised(ThresholdEventArgs date) {
+        ThresholdEvent?.Invoke(this, date); // Invoke Date Event
     }
 }
