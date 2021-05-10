@@ -1,12 +1,12 @@
-
+﻿
 using System;
 					
 public class Program
 {
 	public static void Main()
     {
-        ProcessBusinessLogic bl = new ProcessBusinessLogic();
-        bl.EventCompleted += bl_EventCompleted; // register with an event
+        EventDemonstration ed = new EventDemonstration();
+        ed.EventCompleted += ed_EventCompleted; // register the event with an event handler
 
 
         int bottles = 5;
@@ -20,27 +20,27 @@ public class Program
         if (bottles <= 0) 
         {
             Console.WriteLine("Oh no! There are no more bottles...");
-            bl.Wait();
+            ed.Wait();
+            bottles = 5;
+            Console.WriteLine(bottles + " bottles left on the wall");
+
         }
-
-        
-		
-		
-
 
     }
 
     // event handler
-    public static void bl_EventCompleted(object sender, EventArgs e)
+    public static void ed_EventCompleted(object sender, EventArgs e)
     {
+        
         Console.WriteLine("Congratulations! You completed an event and replenished the bottles on the wall!");
+
     }
 }
 
 
 public delegate void Notify();  // delegate
                     
-public class ProcessBusinessLogic
+public class EventDemonstration
 {
     public event EventHandler EventCompleted; // event
 
@@ -49,7 +49,7 @@ public class ProcessBusinessLogic
         bool repeat = true;
 
         
-		Console.WriteLine("Would you like to replenish the bottles on the wall?");
+		Console.WriteLine("Would you like to go to the store and buy some more?");
 
         do
 		{
@@ -61,7 +61,7 @@ public class ProcessBusinessLogic
                     repeat = false;
 					break;
 				case "no":
-					Console.WriteLine("No bottles for you then...");
+					Console.WriteLine("No more bottles for you then...");
 					Console.WriteLine("How about now?");
 					break;
 				default:
