@@ -72,11 +72,11 @@ public class ProcessBusinessLogic
                 case "4":
                     repeat = false;
                     var data = new ThresholdEventArgs();
-                    data.CompletionTime = DateTime.Now;
                     for (int i = 0; i < 5; i++)
                     {
                         data.Threshold = i;
                     }
+                    data.CompletionTime = DateTime.Now;
                     ThresholdEventRaised(data); // Date Event Data
 
                     break;
